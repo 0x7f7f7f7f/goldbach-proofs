@@ -18,10 +18,13 @@ private theorem reflectResidue (n q r k : Nat) (hk : k ≤ n) (hr : r < q) :
     exact_mod_cast Nat.mod_eq_of_lt hr
   have equiv := subCongr (n : Int) (k : Int) (r : Int) (q : Int)
   rw [hr'] at equiv
+  have wrap (a b : Int) : (a + b) % b = a % b := by
+    simpa only [Int.mul_one] using Int.add_mul_emod_self_left a b 1
+  have castMod (a b : Nat) : (a : Int) % (b : Int) = ((a % b : Nat) : Int) := rfl
   have target : ((n : Int) - k) % q = ((n : Int) + q - r) % q ↔ (k : Int) % q = r := by
-    simpa only [h, Int.add_emod_self] using equiv
+    simpa only [h, wrap] using equiv
   simpa only [← Int.ofNat_sub hk, ← Int.natCast_add, ← Int.ofNat_sub le,
-    ← Int.ofNat_emod, Int.ofNat_inj] using target
+    castMod, Int.ofNat_inj] using target
 
 theorem L_goldbach_coset_sum_reflection :
     let F := fun n q r : ℕ => (Finset.range (n + 1)).filter (fun k => k % q = r);
