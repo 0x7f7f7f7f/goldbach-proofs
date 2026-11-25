@@ -3,7 +3,9 @@ import Mathlib
 namespace PEqualNP.Outside
 
 theorem L_goldbach_sieve_residue_dimension :
-    ∀ n p : ℕ, p.Prime → ((Finset.range p).filter (fun k => k%p=0 ∨ k%p=n%p)).card = if p∣n then 1 else 2 := by
+    ∀ n p : ℕ, p.Prime →
+      ((Finset.range p).filter (fun k => k % p = 0 ∨ k % p = n % p)).card =
+        if p ∣ n then 1 else 2 := by
   classical
   intro n p hp
   have hr : n % p < p := Nat.mod_lt _ hp.pos
